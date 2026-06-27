@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# SQLite databases (contain user data — keep out of version control)
+*.db
+*.db-shm
+*.db-wal
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output
+.next/
+dist/
+build/
+out/
+.expo/
+.expo-shared/
+
+# Expo
+expo-env.d.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Laravel
+/laravel-api/vendor/
+/laravel-api/storage/logs/*.log
+/laravel-api/.env
+/laravel-api/storage/app/public
+/laravel-api/public/storage

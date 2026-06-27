@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bayans Cafe — Phone Preview</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 15%, rgba(212,160,23,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 85% 85%, rgba(255,107,0,0.09) 0%, transparent 70%),
+        #080808;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212,160,23,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+    .top-bar-brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .top-bar-logo {
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, #D4A017, #FF6B00);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .top-bar-name {
+      font-weight: 700; font-size: 14px;
+      color: #fff; letter-spacing: 0.3px;
+    }
+    .top-bar-name span { color: #D4A017; }
+    .top-bar-badge {
+      font-size: 10px; font-weight: 600;
+      color: #D4A017; border: 1px solid rgba(212,160,23,0.3);
+      padding: 3px 10px; border-radius: 20px;
+      background: rgba(212,160,23,0.08);
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .top-bar-links {
+      display: flex; gap: 8px;
+    }
+    .top-bar-link {
+      font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 8px;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .link-admin {
+      background: rgba(212,160,23,0.15);
+      color: #D4A017; border: 1px solid rgba(212,160,23,0.25);
+    }
+    .link-admin:hover { background: rgba(212,160,23,0.25); }
+    .link-mobile {
+      background: rgba(255,255,255,0.06);
+      color: #fff; border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ── Scene ── */
+    .scene {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      padding-top: 52px;
+      height: 100vh;
+    }
+
+    /* ── Phone ── */
+    .phone-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .phone {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background: #111;
+      border-radius: 52px;
+      padding: 12px;
+      box-shadow:
+        0 0 0 1.5px #252525,
+        0 0 0 3px #111,
+        0 0 0 4px #222,
+        0 40px 100px rgba(0,0,0,0.85),
+        0 0 80px rgba(212,160,23,0.06),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    /* Notch */
+    .notch {
+      position: absolute;
+      top: 12px; left: 50%; transform: translateX(-50%);
+      width: 126px; height: 36px;
+      background: #0a0a0a;
+      border-radius: 0 0 24px 24px;
+      z-index: 20;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .notch-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #1a1a1a;
+      border: 1.5px solid #252525;
+    }
+
+    /* Status bar */
+    .status {
+      position: absolute;
+      top: 16px; left: 30px; right: 30px;
+      height: 36px;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px; font-weight: 700; color: #fff;
+    }
+    .status-icons { display: flex; align-items: center; gap: 5px; }
+
+    /* Screen */
+    .screen {
+      width: 100%; height: 100%;
+      border-radius: 40px;
+      overflow: hidden;
+      background: #0D0D0D;
+      position: relative;
+    }
+    .screen iframe {
+      width: 100%; height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Side buttons */
+    .btn { position: absolute; background: #1e1e1e; border-radius: 3px; }
+    .btn-silent { left: -5px; top: 108px; width: 5px; height: 34px; }
+    .btn-vol-up { left: -5px; top: 158px; width: 5px; height: 66px; }
+    .btn-vol-dn { left: -5px; top: 238px; width: 5px; height: 66px; }
+    .btn-power  { right: -5px; top: 172px; width: 5px; height: 88px; }
+
+    /* Home bar */
+    .home-bar {
+      position: absolute;
+      bottom: 10px; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 5px;
+      background: rgba(255,255,255,0.22);
+      border-radius: 100px;
+      z-index: 20;
+    }
+
+    /* Phone label */
+    .phone-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.12);
+    }
+    .phone-label span { color: rgba(212,160,23,0.35); }
+
+    /* ── Admin panel preview card ── */
+    .admin-card {
+      width: 560px;
+      background: rgba(22,33,62,0.6);
+      border: 1px solid rgba(212,160,23,0.12);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .admin-card-header {
+      padding: 14px 18px;
+      background: rgba(212,160,23,0.08);
+      border-bottom: 1px solid rgba(212,160,23,0.1);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .admin-card-dots { display: flex; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .admin-card-url {
+      flex: 1; text-align: center;
+      font-size: 12px; color: rgba(255,255,255,0.3);
+      font-family: monospace; letter-spacing: 0.5px;
+    }
+    .admin-card iframe {
+      width: 100%; height: 540px;
+      border: none; display: block;
+      transform-origin: top left;
+    }
+
+    /* Responsive: stack on small screens */
+    @media (max-width: 1100px) {
+      .admin-card { display: none; }
+      .scene { gap: 0; }
+    }
+    @media (max-width: 500px) {
+      .top-bar, .phone-wrap .phone-label { display: none; }
+      body { background: #0D0D0D; }
+      .scene { padding-top: 0; }
+      .phone {
+        width: 100vw; height: 100vh;
+        border-radius: 0; padding: 0;
+        box-shadow: none;
+      }
+      .screen { border-radius: 0; }
+      .notch, .status, .btn, .home-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top navigation bar -->
+  <div class="top-bar">
+    <div class="top-bar-brand">
+      <div class="top-bar-logo">🍔</div>
+      <div class="top-bar-name">Bayans <span>Cafe</span></div>
+      <div class="top-bar-badge">Preview</div>
+    </div>
+    <div class="top-bar-links">
+      <a class="top-bar-link link-admin" href="http://localhost:3001" target="_blank">Admin Panel →</a>
+      <span class="top-bar-link link-mobile">📱 Mobile App</span>
+    </div>
+  </div>
+
+  <!-- Main scene -->
+  <div class="scene">
+
+    <!-- Phone -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <!-- Hardware buttons -->
+        <div class="btn btn-silent"></div>
+        <div class="btn btn-vol-up"></div>
+        <div class="btn btn-vol-dn"></div>
+        <div class="btn btn-power"></div>
+
+        <!-- Dynamic Island / Notch -->
+        <div class="notch"><div class="notch-dot"></div></div>
+
+        <!-- Status bar -->
+        <div class="status">
+          <span id="clock">9:41 AM</span>
+          <div class="status-icons">
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 10a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm0-3.5A5.5 5.5 0 0 1 11.9 8L10.6 9.3A3.5 3.5 0 0 0 5.4 9.3L4.1 8A5.5 5.5 0 0 1 8 6.5zm0-3.5A9 9 0 0 1 14.2 5.5L12.9 6.8A7 7 0 0 0 3.1 6.8L1.8 5.5A9 9 0 0 1 8 3z" fill-rule="evenodd"/></svg>
+            <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 0 0 0-4z" fill="white" fill-opacity="0.4"/></svg>
+          </div>
+        </div>
+
+        <!-- App screen (iframe) -->
+        <div class="screen">
+          <iframe
+            src="http://localhost:8081"
+            title="Bayans Cafe Mobile App"
+            allow="accelerometer; gyroscope"
+            loading="lazy"
+          ></iframe>
+        </div>
+
+        <!-- Home indicator -->
+        <div class="home-bar"></div>
+      </div>
+
+      <p class="phone-label">Bayans Cafe &nbsp;·&nbsp; <span>Powered by Digital Hujra</span></p>
+    </div>
+
+    <!-- Admin panel mini preview -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <div class="admin-card-url">localhost:3001 — Admin Panel</div>
+      </div>
+      <iframe
+        src="http://localhost:3001/login"
+        title="Admin Panel"
+        style="transform: scale(0.72); transform-origin: top left; width: 138.9%; height: 750px; margin-bottom: -214px;"
+      ></iframe>
+    </div>
+
+  </div>
+
+  <script>
+    // Live clock
+    function tick() {
+      const d = new Date();
+      let h = d.getHours(), m = d.getMinutes();
+      const ap = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('clock').textContent =
+        h + ':' + String(m).padStart(2,'0') + ' ' + ap;
+    }
+    tick(); setInterval(tick, 10000);
+  </script>
+</body>
+</html>

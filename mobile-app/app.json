@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Bayans Cafe",
+    "slug": "bayans-cafe-menu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "bayans-cafe",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A1A2E"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.digitalholzera.bayanscafe"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#1A1A2E"
+      },
+      "package": "com.digitalholzera.bayanscafe",
+      "permissions": ["NOTIFICATIONS", "RECEIVE_BOOT_COMPLETED", "VIBRATE"]
+    },
+    "plugins": [
+      "expo-router",
+      ["expo-notifications", {
+        "icon": "./assets/images/notification-icon.png",
+        "color": "#D4A017"
+      }]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
